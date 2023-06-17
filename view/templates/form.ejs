@@ -1,0 +1,58 @@
+<h1><%=form_title%></h1>
+<div class="row">
+    <div class="col-sm-12">
+        <form id=<%=form_id%> class="needs-validation">
+        
+            <% for (let field of model.fields) { %>
+                <% if (field.inputType != 'select') { %>
+                    <div class="<%=field.column%> mb-3">
+                        <label for="<%=field.name%>"><%=field.label%></label>
+                        <input type="<%=field.inputType%>" class="form-control" name="<%=field.name%>" id="<%=field.name%>" placeholder="<%=field.placeholder%>" value="<%=data[field.name]%>" />
+                        <div class="invalid-feedback"></div>
+                    </div>
+                    <% continue; %>
+                <% } %>
+                <div class="form-group <%=field.column%> mb-3">
+                    <label for="<%=field.name%>"><%=field.label%></label>
+                    <select id="<%=field.name%>" name="<%=field.name%>">
+                        <% if (field.get_options_dynamically) { 
+                            if (field.get_options_dynamically === 'teams') {
+                                let temp_storage = storage;
+                                temp_storage.reset();
+                                let teams = await temp_storage.get_all_teams()
+                                field.options = [];
+                                for (let team of teams) {
+                                    let option = {label: team.name, value: team.id}
+                                    field.options.push(option);
+                                }
+                            }
+                            if (field.get_options_dynamically === 'owners') {
+                                let temp_storage = storage;
+                                temp_storage.reset();
+                                let teams = await temp_storage.get_all_owners()
+                                field.options = [];
+                                for (let owner of owners) {
+                                    let option = {label: owner.name, value: owner.id}
+                                    field.options.push(option);
+                                }
+                            }
+                        } %>
+                        <% for (let opt of field.options) { %>
+                            <% if (opt.value == data[field.name]) { %>
+                                <option value="<%=opt.value%>" selected> <%=opt.label%> </option>
+                                <% continue; %>
+                            <% } %>
+                            <option value="<%=opt.value%>"> <%=opt.label%> </option>
+                        <% } %>
+                    </select>
+                    <div class="invalid-feedback"></div>
+                </div>
+            <% } %>
+
+            <button id="formSubmit" class="btn btn-primary app-btn">Submit</button>
+            <button id="formReset" class="btn btn-primary app-btn">Reset</button>
+        
+        </form>
+    </div>
+    <div class="col-sm-4"></div>
+</div>

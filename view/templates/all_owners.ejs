@@ -1,0 +1,49 @@
+<table id="owners-list" class="table">
+    <tbody>
+        <tr class="trow">
+            <% let excluded = ['id', 'address2', 'city', 'state', 'zip', 'password'] %> 
+            <% for (let header in owners_data[0]) { %>
+                <% if (excluded.includes(header)) continue; %>
+                <!-- Set title -->
+                <% let title = ''; %>
+                <% if (header == 'first_name') title = 'First Name'; %>
+                <% if (header == 'last_name') title = 'Last Name'; %>
+                <% if (header == 'address1') title = 'Address'; %>
+                <% if (header == 'team_id') title = 'Team'; %>
+                <% if (header == 'email') title = 'Email'; %>
+                <% if (header == 'phone') title = 'Phone'; %>
+                <% if (header == 'user_name') title = 'Username'; %>
+                <!-- Add Headers for each field -->
+                <th class="thead sortable" data-name="<%=header%>">
+                    <% if (header == storage.sort_col){ %>
+                        <% if (storage.sort_dir == 'asc') { %>
+                            <%=title%> <i id="<%=header%>-asc" class="fa fa-arrow-up"></i>
+                            <i id="<%=header%>-desc" class="fa fa-arrow-down d-none"></i>
+                        <% } else {%>
+                            <%=title%> <i id="<%=header%>-desc" class="fa fa-arrow-down"></i>
+                            <i id="<%=header%>-asc" class="fa fa-arrow-up d-none"></i>
+                        <% } %>
+                    <% } else { %>
+                        <%=title%> <i id="<%=header%>-asc" class="fa fa-arrow-up d-none"></i>
+                        <i id="<%=header%>-desc" class="fa fa-arrow-down d-none"></i>
+                    <% } %>
+                </th>
+            <% } %> 
+            <th class="thead">Actions</th>
+        </tr>
+        <% for (let owner of owners_data) { %>
+            <% let team = await storage.get_one_team(owner.team_id); %>
+            <% let team_name = team.name %>
+            <tr>
+                <td><%=owner.first_name%></td>
+                <td><%=owner.last_name%></td>
+                <td><%=`${owner.address1} ${owner.address2} ${owner.city}, ${owner.state} ${owner.zip}`%></td>
+                <td><%=team_name%></td>
+                <td><%=owner.email%></td>
+                <td><%=owner.phone%></td>
+                <td><%=owner.user_name%></td>
+                <td class="click-icon" style="padding-left: 2%;"><i id="edit<%=owner.id%>" class="fas fa-edit"></i> <i id="remove<%=owner.id%>" class="fas fa-trash"></i></td>
+            </tr>
+        <% } %> 
+    </tbody>
+</table>

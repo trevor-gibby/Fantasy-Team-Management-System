@@ -1,0 +1,34 @@
+<table id="teams-list" class="table">
+    <tbody>
+        <tr class="trow">
+            <th class="thead sortable" data-name="name">
+                Team Name
+                <% if (storage.sort_dir == 'asc') { %>
+                    <i id="name-asc" class="fa fa-arrow-up"></i>
+                    <i id="name-desc" class="fa fa-arrow-down d-none"></i>
+                <% } else {%>
+                    <i id="name-desc" class="fa fa-arrow-down"></i>
+                    <i id="name-asc" class="fa fa-arrow-up d-none"></i>
+                <% } %>
+            </th>
+            <th class="thead">
+                Owner
+            </th>
+            <th class="thead">
+                Notes
+            </th>
+            <th class="thead">Actions</th>
+        </tr>
+        <% for (let team of teams_data) { %>
+            <% if (team.id === 1) continue; %>
+            <% let owner = await storage.get_one_owner(team.owner_id); %>
+            <% let owner_name = `${owner.first_name} ${owner.last_name}` %>
+            <tr>
+                <td><%=team.name%></td>
+                <td><%=owner_name%></td>
+                <td><%=team.notes%></td>
+                <td class="click-icon" style="padding-left: 2%;"><i id="edit<%=team.id%>" class="fas fa-edit"></i> <i id="remove<%=team.id%>" class="fas fa-trash"></i></td>
+            </tr>
+        <% } %> 
+    </tbody>
+</table>
