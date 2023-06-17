@@ -1,4 +1,4 @@
-# Fantasy-Team-Management-System
+# Fantasy Team Management System
 
 A SPA for managing a basketball fantasy league built using node/express, ejs and MySQL for the backend and HTML, CSS and JS for the frontend.
 
